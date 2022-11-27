@@ -7,19 +7,21 @@ const isValid = function (value, type) {
     if (typeof value != type) return false
     return true;
 }
-const isValidMobile = function (value, type) {
-    if (typeof value === 'undefined' || value === null) return false
-    if (typeof value != type) return false
-    return true;
-}
-
+    const isValidMobile = (phone) => {
+        // let regex = /^[6-9]{1}[0-9]{9}$/.test(phone)
+        let regex = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/.test(phone)
+        return regex
+    }
+    
 
 //function for request body validation
 const isValidRequestBody = function (requestBody) {
     return Object.keys(requestBody).length > 0
 }
 const registerIntern = async function (req, res) {
+   res.setHeader('Access-Control-Allow-Origin','*')
     try {
+
         const requestBody = req.body
 
         if (!isValidRequestBody(requestBody)) {
@@ -48,10 +50,6 @@ const registerIntern = async function (req, res) {
             return
         }
         //mobile number validation
-        if (!(/^\d{10}$/.test(mobile))) {
-            res.status(400).send({ status: false, message: `mobile should be a valid` })
-            return
-        }
         if (!isValid(collegeName, 'string')) {
             res.status(400).send({ status: false, message: "collegeName is required and should be valid" })
             return
